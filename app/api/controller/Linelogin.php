@@ -139,13 +139,18 @@ class Linelogin extends Common
         
         // 登入成功後重定向到首頁或指定頁面
         if ($ret['code'] == 0) {
-            // 設置用戶 session
-            if (!empty($ret['data'])) {
-                session('user', $ret['data']);
+            // 獲取用戶信息
+            $user = $ret['data'];
+            
+            // 生成用戶 token 並設置 cookie（模擬 PC 端登入）
+            $token = UserService::UserLoginToken($user['id']);
+            if (!empty($token)) {
+                // 設置 cookie，7天有效期
+                setcookie('user_token', $token, time() + 7*24*3600, '/', '', false, true);
             }
             
-            // 重定向到首頁
-            $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/';
+            // 重定向到首頁（使用 index.php 入口，確保 session 正確）
+            $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php';
             header('Location: ' . $redirectUrl);
             exit;
         } else {
