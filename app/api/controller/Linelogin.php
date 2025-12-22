@@ -143,13 +143,20 @@ class Linelogin extends Common
             $user = $ret['data'];
             $login_ret = UserService::UserLoginHandle($user['id'], []);
             
-            if ($login_ret['code'] == 0 && !empty($user['token'])) {
-                // 重定向到首頁，並帶上 token 參數讓前端可以識別登入狀態
-                $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user['token'];
-                header('Location: ' . $redirectUrl);
-                exit;
+            if ($login_ret['code'] == 0) {
+                // 重新獲取用戶信息（包含 token）
+                $user_with_token = UserService::UserInfo('id', $user['id']);
+                
+                if (!empty($user_with_token['token'])) {
+                    // 重定向到首頁，並帶上 token 參數讓前端可以識別登入狀態
+                    $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user_with_token['token'];
+                    header('Location: ' . $redirectUrl);
+                    exit;
+                } else {
+                    return ApiService::ApiDataReturn('Token 生成失敗', -1);
+                }
             } else {
-                return ApiService::ApiDataReturn('登入處理失敗', -1);
+                return ApiService::ApiDataReturn('登入處理失敗: ' . ($login_ret['msg'] ?? 'Unknown error'), -1);
             }
         } else {
             return ApiService::ApiDataReturn($ret['msg'], -1);
