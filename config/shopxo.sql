@@ -2250,6 +2250,9 @@ CREATE TABLE `sxo_user_platform`  (
   `qq_openid` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'QQopenid',
   `qq_unionid` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'QQunionid',
   `kuaishou_openid` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '快手openid',
+  `line_openid` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'LINE openid',
+  `line_unionid` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'LINE unionid',
+  `line_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'LINE email',
   `add_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
   `upd_time` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
@@ -2266,7 +2269,10 @@ CREATE TABLE `sxo_user_platform`  (
   INDEX `toutiao_unionid`(`toutiao_unionid` ASC) USING BTREE,
   INDEX `qq_openid`(`qq_openid` ASC) USING BTREE,
   INDEX `qq_unionid`(`qq_unionid` ASC) USING BTREE,
-  INDEX `kuaishou_openid`(`kuaishou_openid` ASC) USING BTREE
+  INDEX `kuaishou_openid`(`kuaishou_openid` ASC) USING BTREE,
+  INDEX `line_openid`(`line_openid` ASC) USING BTREE,
+  INDEX `line_unionid`(`line_unionid` ASC) USING BTREE,
+  INDEX `line_email`(`line_email` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户平台';
 
 -- ----------------------------

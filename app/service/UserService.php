@@ -2609,9 +2609,10 @@ class UserService
         // 微信用户unionid
         // QQ用户unionid
         // 头条用户unionid
+        // LINE用户unionid
         $field = null;
         $value = null;
-        $fields_arr = ['weixin_unionid', 'qq_unionid', 'toutiao_unionid'];
+        $fields_arr = ['weixin_unionid', 'qq_unionid', 'toutiao_unionid', 'line_unionid'];
         foreach($fields_arr as $unionid)
         {
             if(!empty($params[$unionid]))

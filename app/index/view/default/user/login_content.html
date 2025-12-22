@@ -168,7 +168,7 @@
         </div>
     </div>
 
-    <!-- 用户登录容器内底部钩子 -->
+    <!-- 用戶登錄容器內底部鉤子 -->
     {{if isset($shopxo_is_develop) and $shopxo_is_develop eq true}}
         <div class="plugins-tag">
             <span>plugins_view_user_login_content_inside_bottom</span>
@@ -181,6 +181,14 @@
             {{/if}}
         {{/foreach}}
     {{/if}}
+
+    <!-- LINE 登入按鈕 -->
+    <div class="am-margin-top-lg am-text-center">
+        <div class="am-text-xs am-margin-bottom-sm am-text-secondary">— 或使用第三方登入 —</div>
+        <a href="{{:MyUrl('api/linelogin/authorize')}}" class="am-btn am-btn-success am-radius am-margin-horizontal-xs" style="background-color: #00B900; border-color: #00B900;">
+            <i class="am-icon-commenting"></i> LINE 登入
+        </a>
+    </div>
 </div>
 
 <!-- 用户登录内容页面底部钩子 -->
