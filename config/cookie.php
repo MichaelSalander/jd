@@ -22,20 +22,25 @@ if(!empty($cookie_domain))
 } else {
     $cookie_domain = __MY_MAIN_DOMAIN__;
 }
+
+// 自動檢測是否使用 HTTPS
+$is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') || 
+            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
 return [
     // cookie 保存时间
     'expire'    => 0,
     // cookie 保存路径
     'path'      => '/',
-    // cookie 有效域名
-    'domain'    => $cookie_domain,
-    //  cookie 启用安全传输
-    'secure'    => false,
+    // cookie 有效域名（空字符串表示當前域名）
+    'domain'    => '',
+    //  cookie 启用安全传输（HTTPS 環境自動啟用）
+    'secure'    => $is_https,
     // httponly设置
     'httponly'  => false,
     // 是否使用 setcookie
     'setcookie' => true,
-    // samesite 设置，支持 'strict' 'lax'
-    'samesite'  => '',
+    // samesite 设置，支持 'strict' 'lax'（HTTPS 下使用 Lax 以支持跨站）
+    'samesite'  => $is_https ? 'Lax' : '',
 ];
 ?>
