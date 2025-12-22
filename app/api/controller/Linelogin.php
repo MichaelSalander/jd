@@ -148,9 +148,17 @@ class Linelogin extends Common
                 $user_with_token = UserService::UserInfo('id', $user['id']);
                 
                 if (!empty($user_with_token['token'])) {
-                    // 設置 cookie 存儲 token（使用 ShopXO 標準的 cookie 名稱）
-                    // MyCookie 的第三個參數是加密標誌，不是過期時間
-                    MyCookie('user_token_data', $user_with_token['token'], true);
+                    // 加密 token 值（與 MyCookie 保持一致的加密方式）
+                    $encrypted_token = urlencode(Authcode(base64_encode(json_encode($user_with_token['token'])), 'ENCODE'));
+                    
+                    // 使用底層 cookie 函數設置，指定 30 天過期時間
+                    cookie('user_token_data', $encrypted_token, [
+                        'expire' => 30 * 24 * 3600, // 30天
+                        'path' => '/',
+                        'domain' => '',
+                        'secure' => false,
+                        'httponly' => true,
+                    ]);
                     
                     // 重定向到首頁，帶上 token 參數確保首次訪問也能立即識別登入狀態
                     $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user_with_token['token'];
