@@ -36,6 +36,14 @@ class Linelogin extends Common
         $channelId = '2002328176';
         $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php/api/linelogin/callback';
         
+        // 調試輸出
+        if (empty($channelId)) {
+            die('Error: Channel ID is empty');
+        }
+        if (empty($callbackUrl)) {
+            die('Error: Callback URL is empty');
+        }
+        
         // LINE OAuth 2.0 授權 URL
         $state = md5(uniqid(rand(), true));
         
@@ -48,12 +56,13 @@ class Linelogin extends Common
             'client_id' => $channelId,
             'redirect_uri' => $callbackUrl,
             'state' => $state,
-            'scope' => 'profile openid email',  // 請求的權限範圍
+            'scope' => 'profile openid email',
         ];
         
+        // 調試輸出完整 URL
         $authorizeUrl = 'https://access.line.me/oauth2/v2.1/authorize?' . http_build_query($params);
         
-        // 重定向到 LINE 授權頁面
+        // 使用 header 重定向
         header('Location: ' . $authorizeUrl);
         exit;
     }
@@ -133,7 +142,7 @@ class Linelogin extends Common
             }
             
             // 重定向到首頁
-            $redirectUrl = __MY_URL__ . '/';
+            $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/';
             header('Location: ' . $redirectUrl);
             exit;
         } else {
