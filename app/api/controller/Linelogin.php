@@ -148,8 +148,12 @@ class Linelogin extends Common
                 $user_with_token = UserService::UserInfo('id', $user['id']);
                 
                 if (!empty($user_with_token['token'])) {
-                    // 重定向到首頁，並帶上 token 參數讓前端可以識別登入狀態
-                    $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user_with_token['token'];
+                    // 設置 cookie 存儲 token（使用 ShopXO 標準的 cookie 名稱）
+                    // 30天有效期，與系統默認保持一致
+                    MyCookie('user_token_data', $user_with_token['token'], 30*24*3600);
+                    
+                    // 重定向到首頁
+                    $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php';
                     header('Location: ' . $redirectUrl);
                     exit;
                 } else {
