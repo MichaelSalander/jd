@@ -54,7 +54,8 @@ class Linelogin extends Common
         $authorizeUrl = 'https://access.line.me/oauth2/v2.1/authorize?' . http_build_query($params);
         
         // 重定向到 LINE 授權頁面
-        return redirect($authorizeUrl);
+        header('Location: ' . $authorizeUrl);
+        exit;
     }
     
     /**
@@ -126,8 +127,15 @@ class Linelogin extends Common
         
         // 登入成功後重定向到首頁或指定頁面
         if ($ret['code'] == 0) {
-            $redirectUrl = MyConfig('home_site_url', '/');
-            return redirect($redirectUrl);
+            // 設置用戶 session
+            if (!empty($ret['data'])) {
+                session('user', $ret['data']);
+            }
+            
+            // 重定向到首頁
+            $redirectUrl = __MY_URL__ . '/';
+            header('Location: ' . $redirectUrl);
+            exit;
         } else {
             return ApiService::ApiDataReturn($ret['msg'], -1);
         }
