@@ -42,16 +42,24 @@ class Lineauth extends Common
         $user = UserService::UserTokenData($token);
         
         if (empty($user) || empty($user['id'])) {
-            $this->assign('msg', 'Token 無效或已過期');
+            $this->assign('msg', 'Token 無效或已過期，請重新登入');
             return $this->fetch('public/tips_error');
         }
         
-        // 記錄登入（這會在 web 應用中設置 session）
+        // 確保 token 存在於用戶數據中
+        if (empty($user['token'])) {
+            $user['token'] = $token;
+        }
+        
+        // 記錄登入（這會在 web 應用中設置 session 和 user_info cookie）
         if (UserService::UserLoginRecord(0, $user)) {
+            // 額外設置 user_token_data cookie，讓系統能持久讀取 token
+            MyCookie('user_token_data', $user['token'], true);
+            
             // 登入成功，重定向到首頁
             return redirect(__MY_URL__);
         } else {
-            $this->assign('msg', '登入處理失敗');
+            $this->assign('msg', '登入處理失敗，請重試');
             return $this->fetch('public/tips_error');
         }
     }
