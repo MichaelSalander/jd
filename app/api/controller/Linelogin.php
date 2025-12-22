@@ -139,19 +139,18 @@ class Linelogin extends Common
         
         // 登入成功後重定向到首頁或指定頁面
         if ($ret['code'] == 0) {
-            // 獲取用戶信息並生成 token
+            // 獲取用戶信息並調用登入處理
             $user = $ret['data'];
-            $token = UserService::UserTokenUpdate($user['id'], $user);
+            $login_ret = UserService::UserLoginHandle($user['id'], []);
             
-            if (!empty($token)) {
-                // 設置 cookie，7天有效期
-                setcookie('user_token', $token, time() + 7*24*3600, '/', '', false, true);
+            if ($login_ret['code'] == 0 && !empty($user['token'])) {
+                // 重定向到首頁，並帶上 token 參數讓前端可以識別登入狀態
+                $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user['token'];
+                header('Location: ' . $redirectUrl);
+                exit;
+            } else {
+                return ApiService::ApiDataReturn('登入處理失敗', -1);
             }
-            
-            // 重定向到首頁（使用 index.php 入口）
-            $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php';
-            header('Location: ' . $redirectUrl);
-            exit;
         } else {
             return ApiService::ApiDataReturn($ret['msg'], -1);
         }
