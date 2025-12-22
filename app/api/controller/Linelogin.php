@@ -32,9 +32,9 @@ class Linelogin extends Common
      */
     public function Authorize()
     {
-        // LINE Channel 配置（從配置文件或資料庫讀取）
-        $channelId = MyConfig('third_party_line_client_id', '2002328176');
-        $callbackUrl = MyConfig('third_party_line_callback_url', SystemBaseService::AttachmentHost() . '/index.php/api/linelogin/callback');
+        // LINE Channel 配置
+        $channelId = '2002328176';
+        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php/api/linelogin/callback';
         
         // LINE OAuth 2.0 授權 URL
         $state = md5(uniqid(rand(), true));
@@ -144,9 +144,9 @@ class Linelogin extends Common
      */
     private function GetAccessToken($code)
     {
-        $channelId = MyConfig('third_party_line_client_id', '2002328176');
-        $channelSecret = MyConfig('third_party_line_client_secret', '93690ede2ea39d645e775c8682b9c2e3');
-        $callbackUrl = MyConfig('third_party_line_callback_url', SystemBaseService::AttachmentHost() . '/index.php/api/linelogin/callback');
+        $channelId = '2002328176';
+        $channelSecret = '93690ede2ea39d645e775c8682b9c2e3';
+        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php/api/linelogin/callback';
         
         $params = [
             'grant_type' => 'authorization_code',
