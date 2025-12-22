@@ -34,7 +34,7 @@ class Linelogin extends Common
     {
         // LINE Channel 配置
         $channelId = '2002328176';
-        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php/api/linelogin/callback';
+        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/api.php/linelogin/callback';
         
         // 調試輸出
         if (empty($channelId)) {
@@ -163,7 +163,7 @@ class Linelogin extends Common
     {
         $channelId = '2002328176';
         $channelSecret = '93690ede2ea39d645e775c8682b9c2e3';
-        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php/api/linelogin/callback';
+        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/api.php/linelogin/callback';
         
         $params = [
             'grant_type' => 'authorization_code',
