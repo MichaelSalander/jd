@@ -198,14 +198,14 @@ return [
     'coordinate_transformation'             => ['alipay', 'weixin', 'toutiao', 'baidu'],
 
     // 货币配置信息
-    // 符号（默认 ￥）
+    // 符号（默认 NT$）
     // 代码（默认 0.0000）
-    // 汇率（默认 RMB）
-    // 名称（默认 人民币）
-    'currency_symbol'                       => '￥',
-    'currency_code'                         => 'RMB',
+    // 汇率（默认 TWD）
+    // 名称（默认 新台幣）
+    'currency_symbol'                       => 'NT$',
+    'currency_code'                         => 'TWD',
     'currency_rate'                         => 0.0000,
-    'currency_name'                         => '人民币',
+    'currency_name'                         => '新台幣',
 
     // 验证码最大验证次数,防止暴力破解
     'security_prevent_violence_max'         => 6,

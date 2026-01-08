@@ -24,6 +24,36 @@ use app\service\SystemBaseService;
 class Linelogin extends Common
 {
     /**
+     * 獲取 LINE 配置
+     * @author   Devil
+     * @blog     http://gong.gg/
+     * @version  1.0.0
+     * @datetime 2026-01-08T00:00:00+0800
+     * @return   array
+     */
+    private function GetLineConfig()
+    {
+        $config = config('line');
+        
+        // 獲取基礎 URL（優先使用 ngrok_url，否則自動檢測）
+        $baseUrl = '';
+        if (!empty($config['ngrok_url'])) {
+            $baseUrl = rtrim($config['ngrok_url'], '/');
+        } else {
+            // 自動檢測當前域名
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+            $baseUrl = $protocol . $_SERVER['HTTP_HOST'];
+        }
+        
+        return [
+            'channel_id' => $config['channel_id'],
+            'channel_secret' => $config['channel_secret'],
+            'callback_url' => $baseUrl . $config['callback_path'],
+            'success_redirect_url' => $baseUrl . $config['success_redirect_path'],
+        ];
+    }
+    
+    /**
      * LINE 授權登入入口
      * @author   Devil
      * @blog     http://gong.gg/
@@ -32,9 +62,10 @@ class Linelogin extends Common
      */
     public function Authorize()
     {
-        // LINE Channel 配置
-        $channelId = '2002328176';
-        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/api.php/linelogin/callback';
+        // 獲取 LINE 配置
+        $config = $this->GetLineConfig();
+        $channelId = $config['channel_id'];
+        $callbackUrl = $config['callback_url'];
         
         // 調試輸出
         if (empty($channelId)) {
@@ -160,8 +191,10 @@ class Linelogin extends Common
                         'httponly' => true,
                     ]);
                     
+                    // 獲取配置的重定向 URL
+                    $config = $this->GetLineConfig();
                     // 重定向到首頁，帶上 token 參數確保首次訪問也能立即識別登入狀態
-                    $redirectUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/index.php?token=' . $user_with_token['token'];
+                    $redirectUrl = $config['success_redirect_url'] . '?token=' . $user_with_token['token'];
                     header('Location: ' . $redirectUrl);
                     exit;
                 } else {
@@ -186,9 +219,11 @@ class Linelogin extends Common
      */
     private function GetAccessToken($code)
     {
-        $channelId = '2002328176';
-        $channelSecret = '93690ede2ea39d645e775c8682b9c2e3';
-        $callbackUrl = 'https://orthopterous-spleenfully-zander.ngrok-free.dev/shopxo/public/api.php/linelogin/callback';
+        // 獲取 LINE 配置
+        $config = $this->GetLineConfig();
+        $channelId = $config['channel_id'];
+        $channelSecret = $config['channel_secret'];
+        $callbackUrl = $config['callback_url'];
         
         $params = [
             'grant_type' => 'authorization_code',
